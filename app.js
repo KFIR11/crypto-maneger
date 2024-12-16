@@ -1,25 +1,43 @@
-// בודק אם MetaMask מותקן
+// בדיקת MetaMask
 if (typeof window.ethereum !== 'undefined') {
     console.log('MetaMask is installed!');
 } else {
-    alert('Please install MetaMask!');
+    alert('MetaMask is not installed. Please install it to continue.');
+    throw new Error('MetaMask is not installed');
 }
 
-// כפתור להתחברות ל-MetaMask
+// התחברות ל-MetaMask
 const connectButton = document.getElementById('connectButton');
 const accountInfo = document.getElementById('accountInfo');
 
-// התחברות ל-MetaMask
 connectButton.addEventListener('click', async () => {
     try {
-        // בקשה למידע מהארנק
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        const account = accounts[0];
+        console.log('Attempting to connect to MetaMask...');
         
-        // הצגת כתובת הארנק
+        // בקשת חשבונות מ-MetaMask
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length === 0) {
+            throw new Error('No accounts found');
+        }
+        
+        const account = accounts[0];
+        console.log('Connected account:', account);
+
+        // הצגת הכתובת המחוברת
         accountInfo.innerHTML = `<p>Connected Account: ${account}</p>`;
     } catch (error) {
         console.error('Error connecting to MetaMask:', error);
-        alert('Connection failed');
+        alert(`Failed to connect to MetaMask: ${error.message}`);
+    }
+});
+
+// האזנה לשינויים בכתובת הארנק
+window.ethereum.on('accountsChanged', (accounts) => {
+    if (accounts.length > 0) {
+        console.log('Account changed:', accounts[0]);
+        accountInfo.innerHTML = `<p>Connected Account: ${accounts[0]}</p>`;
+    } else {
+        console.log('No accounts connected');
+        accountInfo.innerHTML = '<p>No accounts connected</p>';
     }
 });
