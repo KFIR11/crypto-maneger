@@ -1,39 +1,25 @@
-document.getElementById("connectMetaMask").addEventListener("click", connectMetaMask);
+// לבדוק אם MetaMask מותקן
+if (typeof window.ethereum !== 'undefined') {
+    console.log('MetaMask is installed!');
+} else {
+    alert('Please install MetaMask!');
+}
 
-let web3;
+// כפתור להתחברות ל-MetaMask
+const connectButton = document.getElementById('connectButton');
+const accountInfo = document.getElementById('accountInfo');
 
-function connectMetaMask() {
-  if (typeof window.ethereum !== 'undefined') {
-    // זה מאמת ש-MetaMask מותקן
-    web3 = new Web3(window.ethereum);
-    ethereum.request({ method: 'eth_requestAccounts' })  // זה יבקש גישה לחשבונות ה-ETH
-      .then(accounts => {
-        console.log('Connected to MetaMask with account:', accounts[0]);
-        // לאחר החיבור נבצע פצ'ינג של נתוני שוק
-        getMarketData();
-      })
-      .catch(error => {
+// להתחבר ל-MetaMask
+connectButton.addEventListener('click', async () => {
+    try {
+        // בקשה למידע מהארנק
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+        
+        // הצגת כתובת הארנק
+        accountInfo.innerHTML = `<p>Connected Account: ${account}</p>`;
+    } catch (error) {
         console.error('Error connecting to MetaMask:', error);
-        alert('Please install MetaMask!');
-      });
-  } else {
-    alert('MetaMask is not installed!');
-  }
-}
-
-function getMarketData() {
-  // כאן אנחנו שולחים בקשה ל-API של CoinGecko כדי לקבל את מחירי המטבעות
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')
-    .then(response => response.json())
-    .then(data => {
-      const bitcoinPrice = data.bitcoin.usd;
-      const ethereumPrice = data.ethereum.usd;
-      document.getElementById('marketData').innerHTML = `
-        <p>Bitcoin: $${bitcoinPrice}</p>
-        <p>Ethereum: $${ethereumPrice}</p>
-      `;
-    })
-    .catch(error => {
-      console.error('Error fetching market data:', error);
-    });
-}
+        alert('Connection failed');
+    }
+});
