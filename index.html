@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoManager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Crypto Manager</h1>
-    <button class="button" id="metamask-connect">Connect MetaMask</button>
-    <button class="button" id="walletconnect-connect">Connect WalletConnect</button>
-    <br><br>
-    <div id="market-data"></div>
+  <div class="container">
+    <h1>CryptoManager</h1>
 
-    <!-- WalletConnect QR Code Modal -->
-    <div id="walletconnect-modal" style="display: none;">
-        <h3>Scan this QR code with your WalletConnect app</h3>
-        <img id="walletconnect-qr" src="" alt="WalletConnect QR Code">
+    <button id="connectMetaMask">Connect MetaMask</button>
+    <button id="connectWalletConnect">Connect WalletConnect</button>
+
+    <h3>Market Data</h3>
+    <div id="marketData">
+      <!-- Display market data here -->
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/client"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-    <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
