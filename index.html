@@ -4,18 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Wallet Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        .network-info {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .network-title {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Crypto Wallet Info</h1>
-    <p>Enter your wallet address:</p>
-    <input type="text" id="walletAddress" placeholder="Enter wallet address here">
-    <p>Enter your API Key:</p>
-    <input type="text" id="apiKey" placeholder="Enter your API Key here">
-    <button onclick="getWalletInfo()">Get Wallet Info</button>
 
-    <h2>Wallet Information:</h2>
-    <pre id="walletInfo"></pre>
+    <div class="container">
+        <h1>Get Wallet Info</h1>
+        <label for="walletAddress">Enter Wallet Address:</label>
+        <input type="text" id="walletAddress" placeholder="Enter your wallet address">
+
+        <label for="ethApiKey">Enter Etherscan API Key (Ethereum):</label>
+        <input type="text" id="ethApiKey" placeholder="Enter your Etherscan API Key">
+
+        <label for="bscApiKey">Enter BSCScan API Key (Binance Smart Chain):</label>
+        <input type="text" id="bscApiKey" placeholder="Enter your BSCScan API Key">
+
+        <label for="cronosApiKey">Enter Cronos API Key:</label>
+        <input type="text" id="cronosApiKey" placeholder="Enter your Cronos API Key">
+
+        <button onclick="getWalletInfo()">Get Wallet Info</button>
+
+        <div class="output" id="output"></div>
+    </div>
 
     <script src="app.js"></script>
+
 </body>
 </html>
