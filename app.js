@@ -1,58 +1,36 @@
-// Ensure MetaMask is installed
-if (typeof window.ethereum !== 'undefined') {
-    console.log("MetaMask is installed");
-} else {
-    alert("MetaMask is not installed. Please install it to continue.");
-}
+document.getElementById('connectMetamask').addEventListener('click', connectMetaMask);
+document.getElementById('fetchMarketData').addEventListener('click', fetchMarketData);
 
-const connectMetaMaskButton = document.getElementById('connectMetaMask');
-const connectWalletConnectButton = document.getElementById('connectWalletConnect');
-
-// Connect to MetaMask
-connectMetaMaskButton.addEventListener('click', async () => {
+async function connectMetaMask() {
+  if (typeof window.ethereum !== 'undefined') {
     try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log("Connected to MetaMask:", accounts);
-        alert('Connected to MetaMask');
+      // Try to connect to MetaMask
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const account = accounts[0]; // Take the first account
+      document.getElementById('walletInfo').textContent = `Connected: ${account}`;
     } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-        alert('Failed to connect to MetaMask');
+      console.error("MetaMask connection error:", error);
+      alert("Error connecting to MetaMask.");
     }
-});
+  } else {
+    alert("MetaMask is not installed.");
+  }
+}
 
-// Connect to WalletConnect (example setup)
-connectWalletConnectButton.addEventListener('click', () => {
-    // Example: You would need WalletConnect integration here
-    alert('WalletConnect not implemented yet');
-});
-
-// Fetch market data (Bitcoin, Ethereum, etc.)
 async function fetchMarketData() {
-    const response = await fetch('https://api.coingecko.com/api/v3/coins/markets', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-        },
-        params: {
-            vs_currency: 'usd',
-            ids: 'bitcoin,ethereum,ripple,solana,cardano'
-        }
-    });
-
+  const apiUrl = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd";
+  try {
+    const response = await fetch(apiUrl);
     const data = await response.json();
-    displayMarketData(data);
+    const marketData = `
+      Bitcoin: $${data.bitcoin.usd}
+      Ethereum: $${data.ethereum.usd}
+      Ripple: $${data.ripple.usd}
+      Solana: $${data.solana.usd}
+      Cardano: $${data.cardano.usd}
+    `;
+    document.getElementById('walletInfo').textContent = marketData;
+  } catch (error) {
+    console.error("Error fetching market data:", error);
+  }
 }
-
-// Display market data
-function displayMarketData(data) {
-    const cryptoList = document.getElementById('cryptoList');
-    cryptoList.innerHTML = ''; // Clear existing data
-    data.forEach(coin => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${coin.name}: $${coin.current_price}`;
-        cryptoList.appendChild(listItem);
-    });
-}
-
-// Call fetchMarketData on page load
-fetchMarketData();
