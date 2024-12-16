@@ -1,57 +1,25 @@
-// בדיקה אם MetaMask מותקן
-function checkMetaMask() {
-    if (typeof window.ethereum !== 'undefined') {
-        console.log("MetaMask is installed.");
-        return true;
-    } else {
-        console.error("MetaMask is not installed.");
-        alert("MetaMask is not installed. Please install MetaMask to continue.");
-        return false;
-    }
-}
+async function getWalletInfo() {
+    const address = document.getElementById("walletAddress").value;
+    const apiKey = document.getElementById("apiKey").value;
 
-// פונקציה להתחבר ל-MetaMask
-async function connectMetaMask() {
-    if (!checkMetaMask()) return;
+    if (!address || !apiKey) {
+        alert("Please enter a wallet address and your API Key.");
+        return;
+    }
+
+    const etherscanURL = `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`;
 
     try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log("Connected account:", accounts[0]);
-        document.getElementById('metaMaskStatus').innerText = `Connected to MetaMask: ${accounts[0]}`;
+        const response = await fetch(etherscanURL);
+        const data = await response.json();
+
+        if (data.status === "1") {
+            const balance = data.result / 1e18; // להפוך לאת'ר
+            document.getElementById("walletInfo").textContent = `Balance: ${balance} ETH`;
+        } else {
+            document.getElementById("walletInfo").textContent = `Error: ${data.message}`;
+        }
     } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-        alert("Failed to connect to MetaMask. Check the console for more details.");
+        document.getElementById("walletInfo").textContent = `Error: ${error.message}`;
     }
 }
-
-// פונקציה לבדוק אם WalletConnect זמין
-function checkWalletConnect() {
-    if (typeof window.walletConnectProvider !== 'undefined') {
-        console.log("WalletConnect is available.");
-        return true;
-    } else {
-        console.error("WalletConnect is not available.");
-        alert("WalletConnect is not available in this browser.");
-        return false;
-    }
-}
-
-// פונקציה להתחבר ל-WalletConnect
-async function connectWalletConnect() {
-    if (!checkWalletConnect()) return;
-
-    try {
-        await window.walletConnectProvider.enable();
-        console.log("WalletConnect connected.");
-        document.getElementById('walletConnectStatus').innerText = "Connected to WalletConnect.";
-    } catch (error) {
-        console.error("Error connecting to WalletConnect:", error);
-        alert("Failed to connect to WalletConnect. Check the console for more details.");
-    }
-}
-
-// מאזינים לכפתורים
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('connectMetaMask').addEventListener('click', connectMetaMask);
-    document.getElementById('connectWalletConnect').addEventListener('click', connectWalletConnect);
-});

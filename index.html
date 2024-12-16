@@ -3,29 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        button {
-            margin: 10px 0;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        p {
-            margin: 10px 0;
-        }
-    </style>
+    <title>Crypto Wallet Info</title>
 </head>
 <body>
-    <h1>Crypto Manager</h1>
-    <button id="connectMetaMask">Connect to MetaMask</button>
-    <p id="metaMaskStatus">MetaMask status will appear here.</p>
-    <button id="connectWalletConnect">Connect to WalletConnect</button>
-    <p id="walletConnectStatus">WalletConnect status will appear here.</p>
+    <h1>Crypto Wallet Info</h1>
+    <p>Enter your wallet address:</p>
+    <input type="text" id="walletAddress" placeholder="Enter wallet address here">
+    <p>Enter your API Key:</p>
+    <input type="text" id="apiKey" placeholder="Enter your API Key here">
+    <button onclick="getWalletInfo()">Get Wallet Info</button>
+
+    <h2>Wallet Information:</h2>
+    <pre id="walletInfo"></pre>
+
     <script src="app.js"></script>
 </body>
 </html>
