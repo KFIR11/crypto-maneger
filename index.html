@@ -4,20 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Manager</title>
-    <link rel="stylesheet" href="styles.css"> <!-- קובץ CSS אם יש לך -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        p {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>Crypto Manager</h1>
-
-    <!-- כפתור להתחברות ל-MetaMask -->
     <button id="connectMetaMask">Connect to MetaMask</button>
-    <p id="account"></p> <!-- מציג את כתובת הארנק של MetaMask -->
-
-    <!-- כפתור להתחברות ל-WalletConnect -->
+    <p id="metaMaskStatus">MetaMask status will appear here.</p>
     <button id="connectWalletConnect">Connect to WalletConnect</button>
-    <p id="walletConnectStatus"></p> <!-- מציג את סטטוס החיבור ל-WalletConnect -->
-
-    <!-- חיבור של קובץ ה-JavaScript -->
+    <p id="walletConnectStatus">WalletConnect status will appear here.</p>
     <script src="app.js"></script>
 </body>
 </html>
