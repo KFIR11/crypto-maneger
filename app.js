@@ -1,29 +1,37 @@
+// פונקציה להתחבר ל-MetaMask
 async function connectMetaMask() {
-  const walletInfo = document.getElementById('walletInfo');
-
-  // בדוק אם MetaMask מותקן
-  if (typeof window.ethereum === 'undefined') {
-    walletInfo.textContent = "MetaMask is not installed. Please install MetaMask and try again.";
-    console.error("MetaMask is not detected in the browser.");
-    return;
-  }
-
-  try {
-    // בקשת הרשאות לארנק
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-    // הצגת כתובת הארנק הראשון
-    const account = accounts[0];
-    walletInfo.textContent = `Connected wallet: ${account}`;
-    console.log(`Connected to MetaMask wallet: ${account}`);
-  } catch (error) {
-    // טיפול בשגיאות ספציפיות
-    console.error("Error connecting to MetaMask:", error);
-
-    if (error.code === 4001) {
-      walletInfo.textContent = "Connection to MetaMask was rejected.";
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            // מבקש את כתובת הארנק ממטאמסק
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            console.log("MetaMask connected:", accounts[0]);
+            document.getElementById('account').innerText = "Connected Account: " + accounts[0];
+        } catch (error) {
+            console.error("Error connecting MetaMask:", error);
+            alert("An error occurred while connecting MetaMask.");
+        }
     } else {
-      walletInfo.textContent = "Failed to connect to MetaMask. Check the console for more details.";
+        alert("MetaMask is not installed. Please install it to connect.");
     }
-  }
 }
+
+// פונקציה להתחבר ל-WalletConnect
+async function connectWalletConnect() {
+    if (typeof window.walletConnectProvider !== 'undefined') {
+        try {
+            // התחברות ל-WalletConnect
+            await window.walletConnectProvider.enable();
+            console.log("WalletConnect connected");
+            document.getElementById('walletConnectStatus').innerText = "WalletConnect is connected";
+        } catch (error) {
+            console.error("Error connecting WalletConnect:", error);
+            alert("An error occurred while connecting WalletConnect.");
+        }
+    } else {
+        alert("WalletConnect is not available.");
+    }
+}
+
+// הוספת מאזין לאירועים של הכפתורים
+document.getElementById('connectMetaMask').addEventListener('click', connectMetaMask);
+document.getElementById('connectWalletConnect').addEventListener('click', connectWalletConnect);

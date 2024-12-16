@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto Manager</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Manager</title>
+    <link rel="stylesheet" href="styles.css"> <!-- קובץ CSS אם יש לך -->
 </head>
 <body>
-  <h1>Crypto Manager</h1>
-  <button id="connectMetamask">Connect MetaMask</button>
-  <button id="fetchMarketData">Fetch Market Data</button>
-  <div id="walletInfo"></div>
+    <h1>Crypto Manager</h1>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
-  <script src="app.js"></script>
+    <!-- כפתור להתחברות ל-MetaMask -->
+    <button id="connectMetaMask">Connect to MetaMask</button>
+    <p id="account"></p> <!-- מציג את כתובת הארנק של MetaMask -->
+
+    <!-- כפתור להתחברות ל-WalletConnect -->
+    <button id="connectWalletConnect">Connect to WalletConnect</button>
+    <p id="walletConnectStatus"></p> <!-- מציג את סטטוס החיבור ל-WalletConnect -->
+
+    <!-- חיבור של קובץ ה-JavaScript -->
+    <script src="app.js"></script>
 </body>
 </html>
