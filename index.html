@@ -1,37 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CryptoManager</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      width: 80%;
-      margin: auto;
-    }
-    button {
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Manager</title>
 </head>
 <body>
-  <div class="container">
-    <h1>CryptoManager</h1>
-
-    <button id="connectMetaMask">Connect MetaMask</button>
-    <button id="connectWalletConnect">Connect WalletConnect</button>
-
-    <h3>Market Data</h3>
-    <div id="marketData">
-      <!-- Display market data here -->
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
-  <script src="app.js"></script>
+    <h1>Crypto Manager</h1>
+    <button id="connectButton">Connect MetaMask</button>
+    <div id="accountInfo"></div>
+    <script src="app.js"></script>
 </body>
 </html>
