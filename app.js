@@ -1,48 +1,75 @@
-// חיבור ל-MetaMask
-document.getElementById('connect-metamask').addEventListener('click', async () => {
-    const walletStatus = document.getElementById('wallet-status');
+// MetaMask integration
+const metamaskConnectBtn = document.getElementById('metamask-connect');
+const walletConnectBtn = document.getElementById('walletconnect-connect');
+const marketDataDiv = document.getElementById('market-data');
+
+// WalletConnect integration
+let walletConnectProvider;
+let walletConnectSession;
+
+// Connect to MetaMask
+metamaskConnectBtn.addEventListener('click', async () => {
     if (typeof window.ethereum !== 'undefined') {
-        console.log('MetaMask detected.');
-
         try {
-            // בקשת הרשאה להתחבר לארנק
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const account = accounts[0];
-            console.log('Connected to MetaMask account:', account);
-            walletStatus.textContent = `Connected to MetaMask: ${account}`;
+            await ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await ethereum.request({ method: 'eth_accounts' });
+            alert('Connected to MetaMask: ' + accounts[0]);
+            fetchMarketData();
         } catch (error) {
-            console.error('Error connecting to MetaMask:', error);
-
-            // טיפול בשגיאות
-            if (error.code === 4001) {
-                walletStatus.textContent = 'User rejected the connection request.';
-            } else {
-                walletStatus.textContent = 'Failed to connect to MetaMask. Please try again.';
-            }
+            console.error(error);
+            alert('Failed to connect to MetaMask');
         }
     } else {
-        console.error('MetaMask not installed.');
-        walletStatus.textContent = 'MetaMask is not installed. Please install it and try again.';
+        alert('MetaMask is not installed');
     }
 });
 
-// שליפת נתוני שוק
-document.getElementById('fetch-market-data').addEventListener('click', async () => {
-    const marketDataList = document.getElementById('market-data');
-    marketDataList.innerHTML = 'Loading market data...';
+// Connect to WalletConnect
+walletConnectBtn.addEventListener('click', () => {
+    const walletConnect = new WalletConnectClient({
+        bridge: "https://bridge.walletconnect.org",
+        qrcodeModalOptions: {
+            mobileLinks: ["metamask", "trust", "coinbase"]
+        }
+    });
 
+    // Check if already connected
+    if (!walletConnect.connected) {
+        walletConnect.createSession().then(() => {
+            const uri = walletConnect.uri;
+            document.getElementById('walletconnect-qr').src = `https://api.walletconnect.org/v1/qr/${uri}`;
+            document.getElementById('walletconnect-modal').style.display = 'block';
+        });
+    }
+
+    walletConnect.on('connect', async (error, payload) => {
+        if (error) {
+            console.error(error);
+            return;
+        }
+        const { accounts } = payload.params[0];
+        alert('Connected to WalletConnect: ' + accounts[0]);
+        fetchMarketData();
+        document.getElementById('walletconnect-modal').style.display = 'none';
+    });
+});
+
+// Fetch market data (using a placeholder API)
+async function fetchMarketData() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd');
         const data = await response.json();
-
-        marketDataList.innerHTML = ''; // איפוס הרשימה
-        for (const [coin, details] of Object.entries(data)) {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${coin.toUpperCase()}: $${details.usd}`;
-            marketDataList.appendChild(listItem);
-        }
+        const { bitcoin, ethereum, ripple, solana, cardano } = data;
+        
+        marketDataDiv.innerHTML = `
+            <p>Bitcoin: $${bitcoin.usd}</p>
+            <p>Ethereum: $${ethereum.usd}</p>
+            <p>Ripple: $${ripple.usd}</p>
+            <p>Solana: $${solana.usd}</p>
+            <p>Cardano: $${cardano.usd}</p>
+        `;
     } catch (error) {
-        console.error('Error fetching market data:', error);
-        marketDataList.textContent = 'Failed to load market data.';
+        console.error(error);
+        marketDataDiv.innerHTML = 'Error fetching market data';
     }
-});
+}

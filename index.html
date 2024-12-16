@@ -3,21 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Platform Crypto Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Crypto Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Multi-Platform Crypto Manager</h1>
-    <div>
-        <h2>Wallet Connections</h2>
-        <button id="connect-metamask">Connect MetaMask</button>
-        <p id="wallet-status"></p>
+    <h1>Crypto Manager</h1>
+    <button class="button" id="metamask-connect">Connect MetaMask</button>
+    <button class="button" id="walletconnect-connect">Connect WalletConnect</button>
+    <br><br>
+    <div id="market-data"></div>
+
+    <!-- WalletConnect QR Code Modal -->
+    <div id="walletconnect-modal" style="display: none;">
+        <h3>Scan this QR code with your WalletConnect app</h3>
+        <img id="walletconnect-qr" src="" alt="WalletConnect QR Code">
     </div>
-    <div>
-        <h2>Fetch Market Data</h2>
-        <button id="fetch-market-data">Fetch Market Data</button>
-        <ul id="market-data"></ul>
-    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/client"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
