@@ -1,46 +1,58 @@
-// בדיקת זמינות MetaMask
+// Ensure MetaMask is installed
 if (typeof window.ethereum !== 'undefined') {
-    console.log('MetaMask detected');
+    console.log("MetaMask is installed");
 } else {
-    alert('MetaMask is not installed. Please install it to continue.');
-    throw new Error('MetaMask is not installed');
+    alert("MetaMask is not installed. Please install it to continue.");
 }
 
-// כפתור התחברות ל-MetaMask
-const connectButton = document.getElementById('connectButton');
-const accountInfo = document.getElementById('accountInfo');
+const connectMetaMaskButton = document.getElementById('connectMetaMask');
+const connectWalletConnectButton = document.getElementById('connectWalletConnect');
 
-connectButton.addEventListener('click', async () => {
+// Connect to MetaMask
+connectMetaMaskButton.addEventListener('click', async () => {
     try {
-        console.log('Trying to connect to MetaMask...');
-        
-        // בקשת חשבונות מ-MetaMask
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        
-        if (accounts && accounts.length > 0) {
-            const account = accounts[0];
-            console.log('Connected to account:', account);
-            
-            // הצגת חשבון מחובר
-            accountInfo.innerHTML = `<p>Connected Account: ${account}</p>`;
-        } else {
-            throw new Error('No accounts returned from MetaMask.');
-        }
+        console.log("Connected to MetaMask:", accounts);
+        alert('Connected to MetaMask');
     } catch (error) {
-        console.error('Failed to connect to MetaMask:', error);
-        alert(`Error: ${error.message || 'An unexpected error occurred.'}`);
+        console.error("Error connecting to MetaMask:", error);
+        alert('Failed to connect to MetaMask');
     }
 });
 
-// מאזין לשינויים בחשבונות MetaMask
-if (window.ethereum) {
-    window.ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-            console.log('Account changed to:', accounts[0]);
-            accountInfo.innerHTML = `<p>Connected Account: ${accounts[0]}</p>`;
-        } else {
-            console.log('No accounts connected');
-            accountInfo.innerHTML = '<p>No accounts connected</p>';
+// Connect to WalletConnect (example setup)
+connectWalletConnectButton.addEventListener('click', () => {
+    // Example: You would need WalletConnect integration here
+    alert('WalletConnect not implemented yet');
+});
+
+// Fetch market data (Bitcoin, Ethereum, etc.)
+async function fetchMarketData() {
+    const response = await fetch('https://api.coingecko.com/api/v3/coins/markets', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        },
+        params: {
+            vs_currency: 'usd',
+            ids: 'bitcoin,ethereum,ripple,solana,cardano'
         }
     });
+
+    const data = await response.json();
+    displayMarketData(data);
 }
+
+// Display market data
+function displayMarketData(data) {
+    const cryptoList = document.getElementById('cryptoList');
+    cryptoList.innerHTML = ''; // Clear existing data
+    data.forEach(coin => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${coin.name}: $${coin.current_price}`;
+        cryptoList.appendChild(listItem);
+    });
+}
+
+// Call fetchMarketData on page load
+fetchMarketData();

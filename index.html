@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Manager</title>
-    <link rel="stylesheet" href="style.css"> <!-- לא נוגעים בקובץ זה -->
+    <title>CryptoManager</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Crypto Manager</h1>
-    <!-- כפתור להתחברות ל-MetaMask -->
-    <button id="connectButton">Connect MetaMask</button>
-    
-    <!-- אזור להציג את פרטי הארנק -->
-    <div id="accountInfo"></div>
-    
-    <script src="app.js"></script> <!-- הקישור לקובץ ה-JavaScript -->
+    <div class="container">
+        <h1>CryptoManager</h1>
+        <button id="connectMetaMask">Connect MetaMask</button>
+        <button id="connectWalletConnect">Connect WalletConnect</button>
+
+        <div id="marketData">
+            <h2>Market Data</h2>
+            <ul id="cryptoList"></ul>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
