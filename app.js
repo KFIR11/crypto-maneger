@@ -1,36 +1,29 @@
-document.getElementById('connectMetamask').addEventListener('click', connectMetaMask);
-document.getElementById('fetchMarketData').addEventListener('click', fetchMarketData);
-
 async function connectMetaMask() {
-  if (typeof window.ethereum !== 'undefined') {
-    try {
-      // Try to connect to MetaMask
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0]; // Take the first account
-      document.getElementById('walletInfo').textContent = `Connected: ${account}`;
-    } catch (error) {
-      console.error("MetaMask connection error:", error);
-      alert("Error connecting to MetaMask.");
-    }
-  } else {
-    alert("MetaMask is not installed.");
-  }
-}
+  const walletInfo = document.getElementById('walletInfo');
 
-async function fetchMarketData() {
-  const apiUrl = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple,solana,cardano&vs_currencies=usd";
+  // בדוק אם MetaMask מותקן
+  if (typeof window.ethereum === 'undefined') {
+    walletInfo.textContent = "MetaMask is not installed. Please install MetaMask and try again.";
+    console.error("MetaMask is not detected in the browser.");
+    return;
+  }
+
   try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    const marketData = `
-      Bitcoin: $${data.bitcoin.usd}
-      Ethereum: $${data.ethereum.usd}
-      Ripple: $${data.ripple.usd}
-      Solana: $${data.solana.usd}
-      Cardano: $${data.cardano.usd}
-    `;
-    document.getElementById('walletInfo').textContent = marketData;
+    // בקשת הרשאות לארנק
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    // הצגת כתובת הארנק הראשון
+    const account = accounts[0];
+    walletInfo.textContent = `Connected wallet: ${account}`;
+    console.log(`Connected to MetaMask wallet: ${account}`);
   } catch (error) {
-    console.error("Error fetching market data:", error);
+    // טיפול בשגיאות ספציפיות
+    console.error("Error connecting to MetaMask:", error);
+
+    if (error.code === 4001) {
+      walletInfo.textContent = "Connection to MetaMask was rejected.";
+    } else {
+      walletInfo.textContent = "Failed to connect to MetaMask. Check the console for more details.";
+    }
   }
 }
