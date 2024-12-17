@@ -1,39 +1,27 @@
-// בדיקה האם MetaMask זמין בדפדפן
-window.onload = () => {
-    if (typeof window.ethereum !== "undefined") {
-        console.log("MetaMask Detected");
-    } else {
-        alert("MetaMask is not installed. Please install it to use this feature.");
+document.addEventListener('DOMContentLoaded', () => {
+    const connectButton = document.getElementById('connectButton');
+    const walletAddress = document.getElementById('walletAddress');
+
+    // בודק האם MetaMask מותקן
+    if (typeof window.ethereum === 'undefined') {
+        walletAddress.textContent = 'MetaMask is not installed. Please install MetaMask and try again.';
+        return;
     }
-};
 
-// התחברות ל-MetaMask
-const connectButton = document.getElementById("connectButton");
-const walletAddressElement = document.getElementById("walletAddress");
-const walletBalanceElement = document.getElementById("walletBalance");
-
-connectButton.addEventListener("click", async () => {
-    if (window.ethereum) {
+    // פונקציה לחיבור לארנק MetaMask
+    async function connectMetaMask() {
         try {
-            // בקשת גישה לארנק
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            const userAddress = accounts[0];
-            walletAddressElement.innerText = `Wallet Address: ${userAddress}`;
-
-            // שליפת הבלנס
-            const balance = await window.ethereum.request({
-                method: "eth_getBalance",
-                params: [userAddress, "latest"]
-            });
-            
-            const formattedBalance = parseFloat(window.web3.utils.fromWei(balance, "ether")).toFixed(4);
-            walletBalanceElement.innerText = `Balance: ${formattedBalance} ETH`;
-
-        } catch (err) {
-            console.error("Error connecting to MetaMask", err);
-            alert("Failed to connect to MetaMask. See console for details.");
+            // מבקש גישה לחשבון
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+            walletAddress.textContent = `Connected: ${account}`;
+            console.log('Connected account:', account);
+        } catch (error) {
+            walletAddress.textContent = 'Failed to connect to MetaMask.';
+            console.error('Error connecting to MetaMask:', error);
         }
-    } else {
-        alert("MetaMask is not installed.");
     }
+
+    // מאזין ללחיצה על הכפתור
+    connectButton.addEventListener('click', connectMetaMask);
 });
